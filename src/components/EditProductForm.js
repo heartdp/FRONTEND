@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import "./EditProductForm.css"; // Import the updated CSS for the EditProductForm modal
 
 const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
-  // State for the form fields
   const [formData, setFormData] = useState({
     productName: product?.productName || "",
     description: product?.description || "",
     price: product?.price || "",
     category: product?.category || "",
-    threshold: product?.threshold || "",
-    stockAvailable: product?.stockAvailable || "",
-    reorderQuantity: product?.reorderQuantity || "",
-    size: product?.size || "", // Added size field
-    supplier: product?.supplier || "", // Added supplier field
+    supplier: product?.supplier || "",
     image: product?.image || null,
   });
 
+  const [sizes, setSizes] = useState(product?.sizes || []);
+  const [newSize, setNewSize] = useState("");
+  const [sizeDetails, setSizeDetails] = useState(product?.sizeDetails || {});
+
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  if (!isOpen) return null; // Don't render modal if it's not open
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,27 +29,46 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
     setFormData((prevState) => ({ ...prevState, image: file }));
   };
 
+  const handleAddSize = () => {
+    if (newSize && !sizes.includes(newSize)) {
+      setSizes([...sizes, newSize]);
+      setSizeDetails({
+        ...sizeDetails,
+        [newSize]: { threshold: "", stockAvailable: "", reorderQuantity: "" },
+      });
+      setNewSize("");
+    }
+  };
+
+  const handleSizeDetailChange = (size, field, value) => {
+    setSizeDetails((prevState) => ({
+      ...prevState,
+      [size]: { ...prevState[size], [field]: value },
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if all fields are filled
-    const allFieldsFilled = Object.values(formData).every(
-      (value) => value !== "" && value !== null
-    );
+    const allFieldsFilled =
+      Object.values(formData).every((value) => value !== "" && value !== null) &&
+      sizes.length > 0;
 
     if (!allFieldsFilled) {
-      setShowErrorModal(true); // Show error modal if fields are missing
+      setShowErrorModal(true);
       return;
     }
 
-    // Format price to PHP (Peso)
     const formattedPrice = `₱${parseFloat(formData.price).toFixed(2)}`;
-    const updatedFormData = { ...formData, price: formattedPrice };
+    const updatedFormData = {
+      ...formData,
+      price: formattedPrice,
+      sizes,
+      sizeDetails,
+    };
 
-    // Send the updated form data back to the parent component
     onSubmit(updatedFormData);
-
-    onClose(); // Close modal after form submission
+    onClose();
   };
 
   const closeErrorModal = () => setShowErrorModal(false);
@@ -61,9 +79,7 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
         <button className="close-btn" onClick={onClose}>
           X
         </button>
-        <br />
         <h2>Edit Product</h2>
-        <br />
         <form onSubmit={handleSubmit}>
           {/* Product Image */}
           <div className="form-group">
@@ -72,7 +88,10 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
               <input type="file" accept="image/*" onChange={handleFileChange} />
               <div className="image-placeholder">
                 {formData.image ? (
-                  <img src={URL.createObjectURL(formData.image)} alt="Product" />
+                  <img
+                    src={URL.createObjectURL(formData.image)}
+                    alt="Product"
+                  />
                 ) : (
                   <p>Upload Image</p>
                 )}
@@ -80,7 +99,7 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             </div>
           </div>
 
-          {/* Product Name */}
+          {/* Other Form Fields */}
           <div className="form-group">
             <label>Product Name</label>
             <input
@@ -92,7 +111,6 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             />
           </div>
 
-          {/* Description */}
           <div className="form-group">
             <label>Description</label>
             <textarea
@@ -103,19 +121,6 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             />
           </div>
 
-          {/* Size */}
-          <div className="form-group">
-            <label>Size</label>
-            <input
-              type="text"
-              name="size"
-              value={formData.size}
-              onChange={handleChange}
-              placeholder="Enter product size"
-            />
-          </div>
-
-          {/* Price */}
           <div className="form-group">
             <label>Price (PHP)</label>
             <input
@@ -127,7 +132,6 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             />
           </div>
 
-          {/* Category */}
           <div className="form-group">
             <label>Category</label>
             <select
@@ -143,7 +147,6 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             </select>
           </div>
 
-          {/* Supplier */}
           <div className="form-group">
             <label>Supplier</label>
             <input
@@ -155,62 +158,98 @@ const EditProductForm = ({ isOpen, onClose, onSubmit, product }) => {
             />
           </div>
 
-          {/* Threshold */}
+          {/* Size Management */}
           <div className="form-group">
-            <label>Threshold</label>
-            <input
-              type="number"
-              name="threshold"
-              value={formData.threshold}
-              onChange={handleChange}
-              placeholder="Enter threshold"
-            />
+            <label>Sizes</label> {/* Updated label text */}
+            <div className="size-input">
+              <input
+                type="text"
+                value={newSize}
+                onChange={(e) => setNewSize(e.target.value)}
+                placeholder="Enter new size"
+              />
+              <button
+                type="button"
+                onClick={handleAddSize}
+                className="add-size-btn"
+              >
+                Add Size
+              </button>
+            </div>
           </div>
 
-          {/* Stock Available */}
-          <div className="form-group">
-            <label>Stock Available</label>
-            <input
-              type="number"
-              name="stockAvailable"
-              value={formData.stockAvailable}
-              onChange={handleChange}
-              placeholder="Enter stock available"
-            />
-          </div>
-
-          {/* Re-Order Quantity */}
-          <div className="form-group">
-            <label>Re-Order Quantity</label>
-            <input
-              type="number"
-              name="reorderQuantity"
-              value={formData.reorderQuantity}
-              onChange={handleChange}
-              placeholder="Enter re-order quantity"
-            />
+          <div className="sizes">
+            {sizes.map((size) => (
+              <div key={size} className="size-container">
+                <button
+                  type="button"
+                  className="size-btn"
+                  onClick={() =>
+                    setSizeDetails((prev) => ({
+                      ...prev,
+                      [size]: { ...prev[size], expanded: !prev[size]?.expanded },
+                    }))
+                  }
+                >
+                  {size}
+                </button>
+                {sizeDetails[size]?.expanded && (
+                  <div className="size-details">
+                    <div className="form-group">
+                      <label>Threshold</label>
+                      <input
+                        type="number"
+                        value={sizeDetails[size].threshold}
+                        onChange={(e) =>
+                          handleSizeDetailChange(size, "threshold", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Stock Available</label>
+                      <input
+                        type="number"
+                        value={sizeDetails[size].stockAvailable}
+                        onChange={(e) =>
+                          handleSizeDetailChange(size, "stockAvailable", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Re-Order Quantity</label>
+                      <input
+                        type="number"
+                        value={sizeDetails[size].reorderQuantity}
+                        onChange={(e) =>
+                          handleSizeDetailChange(size, "reorderQuantity", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
           <button type="submit" className="submit-btn">
             Edit Product
           </button>
         </form>
-      </div>
 
-      {showErrorModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Missing Fields</h2>
-            <p>All fields are required. Please fill in all the fields.</p>
-            <button className="submit-btn" onClick={closeErrorModal}>
-              OK
-            </button>
+        {showErrorModal && (
+          <div className="error-modal-overlay">
+            <div className="error-modal-content">
+              <h2>Missing Fields</h2>
+              <p>All fields are required. Please fill in all the fields.</p>
+              <button className="submit-btn" onClick={closeErrorModal}>
+                OK
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
 
 export default EditProductForm;
-  

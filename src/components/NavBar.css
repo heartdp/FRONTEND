@@ -117,7 +117,7 @@ header {
         border-radius: 4px;
         border: 1px solid #ddd;
         background-color: #d9d9d9; /* Set background color of the search input */
-        margin-top: 8px;
+        margin-top: 20px;
     }
 
     /* Change border color on focus */
@@ -131,16 +131,49 @@ header {
         border: none;
         cursor: pointer;
         padding: 8px;
-        margin-top: 8px;
+        margin-top: 15px;
     }
+ 
+    .user-notification-icons {
+       display: flex;
+        align-items: center;
+        gap: 10px; /* Adjust spacing between the icons */
+    }
+      
+    /* User and Notification Icon Adjustments */
+.user-notification-icons button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 60%;
+    transition: background-color 0.3s;
+}
 
-    .user-icon, .notification-icon {
-        background-color: transparent;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-        margin-top: 8px;
-    }
+.user-notification-icons button:hover {
+    background-color: #f1f1f1; /* Light gray background on hover */
+}
+
+.user-icon svg,
+.notification-icon svg {
+    width: 29px;  /* Reduced size for user icon */
+    height: 28px; /* Reduced size for user icon */
+    fill: #333; /* Default icon color */
+    transition: fill 0.3s;
+}
+
+.notification-icon svg {
+    width: 30px;  /* Slightly larger size for notification bell */
+    height: 30px; /* Slightly larger size for notification bell */
+}
+
+.user-notification-icons button:hover svg {
+    fill: #fe3835; /* Red color on hover */
+}
+
 }
 
 /* Mobile Navigation Menu */
@@ -209,30 +242,29 @@ nav ul.menu {
         transform: scale(0);
     }
 }
-/* Add these styles in your NavBar.css */
+
 .menu {
     display: none;
-  }
-  
-  .menu.active {
+}
+
+.menu.active {
     display: block;
-  }
-  
-  .mobile-toggle {
+}
+
+.mobile-toggle {
     background: none;
     border: none;
     cursor: pointer;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .menu {
-      display: none;
-      /* More mobile-specific styling here */
+        display: none;
+        /* More mobile-specific styling here */
     }
-  
+
     .menu.active {
-      display: block;
-      /* Menu active state styling */
+        display: block;
+        /* Menu active state styling */
     }
-  }
-      
+}

@@ -8,10 +8,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
     description: "",
     price: "",
     category: "",
-    threshold: "",
-    stockAvailable: "",
-    reorderQuantity: "",
-    size: "", // Added size field
     supplier: "", // Added supplier field
     image: null,
   });
@@ -60,10 +56,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
       description: "",
       price: "",
       category: "",
-      threshold: "",
-      stockAvailable: "",
-      reorderQuantity: "",
-      size: "", // Reset size
       supplier: "", // Reset supplier
       image: null,
     });
@@ -121,18 +113,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          {/* Size */}
-          <div className="form-group">
-            <label>Size</label>
-            <input
-              type="text"
-              name="size"
-              value={formData.size}
-              onChange={handleChange}
-              placeholder="Enter product size"
-            />
-          </div>
-
           {/* Price */}
           <div className="form-group">
             <label>Price (PHP)</label>
@@ -170,42 +150,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
               value={formData.supplier}
               onChange={handleChange}
               placeholder="Enter supplier name"
-            />
-          </div>
-
-          {/* Threshold */}
-          <div className="form-group">
-            <label>Threshold</label>
-            <input
-              type="number"
-              name="threshold"
-              value={formData.threshold}
-              onChange={handleChange}
-              placeholder="Enter threshold"
-            />
-          </div>
-
-          {/* Stock Available */}
-          <div className="form-group">
-            <label>Stock Available</label>
-            <input
-              type="number"
-              name="stockAvailable"
-              value={formData.stockAvailable}
-              onChange={handleChange}
-              placeholder="Enter stock available"
-            />
-          </div>
-
-          {/* Re-Order Quantity */}
-          <div className="form-group">
-            <label>Re-Order Quantity</label>
-            <input
-              type="number"
-              name="reorderQuantity"
-              value={formData.reorderQuantity}
-              onChange={handleChange}
-              placeholder="Enter re-order quantity"
             />
           </div>
 

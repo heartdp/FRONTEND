@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import "./NavBar.css";
+import AdminTool from "./AdminTool"; // Import AdminTool component
 
 const NavBar = () => {
   const [menuActive, setMenuActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   const toggleMobileMenu = () => {
     setMenuActive(!menuActive);
+  };
+
+  const openAdminToolModal = () => {
+    setIsModalOpen(true); // Open the modal when the user icon is clicked
+  };
+
+  const closeAdminToolModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   return (
@@ -98,38 +108,35 @@ const NavBar = () => {
 
         {/* User and Notification Icons */}
         <div className="user-notification-icons">
-          <button className="user-icon">
+          {/* Updated User Icon */}
+          <button className="user-icon" onClick={openAdminToolModal}>
             <svg
-              className="w-6 h-6 text-gray-800 dark:text-white"
-              aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
               viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
             >
-              <path
-                fillRule="evenodd"
-                d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
-                clipRule="evenodd"
-              />
+              <path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 12c-5.523 0-10 4.477-10 10h2a8 8 0 0 1 16 0h2c0-5.523-4.477-10-10-10z" />
             </svg>
           </button>
+
+          {/* Updated Notification Icon */}
           <button className="notification-icon">
             <svg
-              className="w-6 h-6 text-gray-800 dark:text-white"
-              aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
               viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
             >
-              <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
+              <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Z" />
             </svg>
           </button>
         </div>
+
       </nav>
+
+      {/* Modal for AdminTool */}
+      {isModalOpen && <AdminTool closeModal={closeAdminToolModal} />}
     </header>
   );
 };
