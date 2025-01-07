@@ -1,66 +1,73 @@
 import React, { useState } from "react";
-import "./AddProductForm.css"; // Import modernized CSS for modal
+import "./AddProductForm.css";
 
 const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
-  // State for the form fields
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
     price: "",
     category: "",
-    supplier: "", // Added supplier field
+    supplier: "",
+    size: "",
+    threshold: "",
+    quantity: "",
+    reorder: "",
     image: null,
   });
 
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [products, setProducts] = useState([]); // State to store the added products
+  const [sizeEntered, setSizeEntered] = useState(false);
 
-  if (!isOpen) return null; // Don't render modal if it's not open
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
+
+    if (name === "size" && value !== "") {
+      setSizeEntered(true);
+    } else if (name === "size" && value === "") {
+      setSizeEntered(false);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData((prevState) => ({ ...prevState, image: file }));
+    setFormData((prev) => ({ ...prev, image: file }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if all fields are filled
     const allFieldsFilled = Object.values(formData).every(
       (value) => value !== "" && value !== null
     );
 
     if (!allFieldsFilled) {
-      setShowErrorModal(true); // Show error modal if fields are missing
+      setShowErrorModal(true);
       return;
     }
 
-    // Format price to PHP (Peso)
     const formattedPrice = `₱${parseFloat(formData.price).toFixed(2)}`;
     const updatedFormData = { ...formData, price: formattedPrice };
 
-    // Send the updated form data back to the parent component
     onSubmit(updatedFormData);
 
-    // Add the product to the state (this simulates adding the product to a list)
-    setProducts((prevProducts) => [...prevProducts, updatedFormData]);
-
-    // Reset the form data
     setFormData({
       productName: "",
       description: "",
       price: "",
       category: "",
-      supplier: "", // Reset supplier
+      supplier: "",
+      size: "",
+      threshold: "",
+      quantity: "",
+      reorder: "",
       image: null,
     });
 
-    onClose(); // Close modal after form submission
+    onClose();
   };
 
   const closeErrorModal = () => setShowErrorModal(false);
@@ -71,11 +78,8 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
         <button className="close-btn" onClick={onClose}>
           X
         </button>
-        <br />
         <h2>Add Product</h2>
-        <br />
         <form onSubmit={handleSubmit}>
-          {/* Product Image */}
           <div className="form-group">
             <label>Product Image</label>
             <div className="image-upload">
@@ -90,7 +94,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             </div>
           </div>
 
-          {/* Product Name */}
+          {/* Product Fields */}
           <div className="form-group">
             <label>Product Name</label>
             <input
@@ -102,7 +106,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          {/* Description */}
           <div className="form-group">
             <label>Description</label>
             <textarea
@@ -113,7 +116,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          {/* Price */}
           <div className="form-group">
             <label>Price (PHP)</label>
             <input
@@ -125,7 +127,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          {/* Category */}
           <div className="form-group">
             <label>Category</label>
             <select
@@ -141,7 +142,6 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             </select>
           </div>
 
-          {/* Supplier */}
           <div className="form-group">
             <label>Supplier</label>
             <input
@@ -152,6 +152,52 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
               placeholder="Enter supplier name"
             />
           </div>
+
+          <div className="form-group">
+            <label>Size</label>
+            <input
+              type="text"
+              name="size"
+              value={formData.size}
+              onChange={handleChange}
+              placeholder="Enter size"
+            />
+          </div>
+
+          {sizeEntered && (
+            <>
+              <div className="form-group">
+                <label>Threshold</label>
+                <input
+                  type="number"
+                  name="threshold"
+                  value={formData.threshold}
+                  onChange={handleChange}
+                  placeholder="Enter threshold"
+                />
+              </div>
+              <div className="form-group">
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  placeholder="Enter quantity"
+                />
+              </div>
+              <div className="form-group">
+                <label>Reorder</label>
+                <input
+                  type="number"
+                  name="reorder"
+                  value={formData.reorder}
+                  onChange={handleChange}
+                  placeholder="Enter reorder amount"
+                />
+              </div>
+            </>
+          )}
 
           <button type="submit" className="submit-btn">
             Add Product

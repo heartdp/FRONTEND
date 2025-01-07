@@ -1,117 +1,97 @@
 import React, { useState } from "react";
 import "./BoysLeatherShoes.css";
 import AddProductForm from "./AddProductForm";
-import EditProductForm from "./EditProductForm"; // Import EditProductForm
+import EditProductForm from "./EditProductForm"; // Import the EditProductForm
 
 const BoysLeatherShoes = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for Add Product modal
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Product modal
-  const [products, setProducts] = useState([]); // State for products
-  const [productToEdit, setProductToEdit] = useState(null); // Product being edited
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Delete Confirmation Modal state
+  const [products, setProducts] = useState([]); // State for storing products
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for Delete Confirmation modal
   const [productToDelete, setProductToDelete] = useState(null); // Product to delete
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Product modal
+  const [productToEdit, setProductToEdit] = useState(null); // Product being edited
 
-  // Open Add Product Modal
-  const openAddModal = () => {
+  // Open Add Product modal
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
-  // Close Add Product Modal
-  const closeAddModal = () => {
+  // Close Add Product modal
+  const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // Add Product
+  // Add new product
   const addProduct = (product) => {
     setProducts([...products, product]);
-    closeAddModal();
   };
 
-  // Open Edit Product Modal
-  const openEditModal = (product) => {
-    setProductToEdit(product);
-    setIsEditModalOpen(true);
-  };
-
-  // Close Edit Product Modal
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-    setProductToEdit(null);
-  };
-
-  // Update Product
-  const updateProduct = (updatedProduct) => {
-    const updatedProducts = products.map((p) =>
-      p === productToEdit ? updatedProduct : p
-    );
-    setProducts(updatedProducts);
-    closeEditModal();
-  };
-
-  // Open Delete Confirmation Modal
+  // Open Delete Confirmation modal
   const openDeleteModal = (product) => {
     setProductToDelete(product);
     setIsDeleteModalOpen(true);
   };
 
-  // Close Delete Confirmation Modal
+  // Close Delete Confirmation modal
   const closeDeleteModal = () => {
-    setProductToDelete(null);
     setIsDeleteModalOpen(false);
+    setProductToDelete(null);
   };
 
-  // Delete Product
+  // Delete the product
   const deleteProduct = () => {
     setProducts(products.filter((p) => p !== productToDelete));
     closeDeleteModal();
   };
 
+  // Open Edit Product modal
+  const openEditModal = (product) => {
+    setProductToEdit(product);
+    setIsEditModalOpen(true);
+  };
+
+  // Close Edit Product modal
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setProductToEdit(null);
+  };
+
+  // Edit existing product
+  const editProduct = (updatedProduct) => {
+    setProducts(
+      products.map((product) =>
+        product === productToEdit ? updatedProduct : product
+      )
+    );
+    closeEditModal();
+  };
+
   return (
-    <div className="products-container">
-      <h1 className="catalog-header">Boy’s Leather Shoes</h1>
-      <button className="add-product-btn" onClick={openAddModal}>
+    <div className="boys-catalog-products-container">
+      <h1 className="boys-catalog-header">Boys’ Leather Shoes</h1>
+
+      {/* Button to trigger Add Product modal */}
+      <button className="boys-catalog-add-product-btn" onClick={openModal}>
         Add Product
       </button>
 
-      {/* Add Product Form */}
-      <AddProductForm
-        isOpen={isModalOpen}
-        onClose={closeAddModal}
-        onSubmit={addProduct}
-      />
-
-      {/* Edit Product Form */}
-      {isEditModalOpen && (
-        <EditProductForm
-          isOpen={isEditModalOpen}
-          onClose={closeEditModal}
-          onSubmit={updateProduct}
-          initialData={productToEdit}
-        />
-      )}
+      {/* Add Product Form Modal */}
+      <AddProductForm isOpen={isModalOpen} onClose={closeModal} onSubmit={addProduct} />
 
       {/* Product Grid */}
-      <div className="products-grid">
+      <div className="boys-catalog-products-grid">
         {products.map((product, index) => (
-          <div key={index} className="product-card">
-            <img
-              src={URL.createObjectURL(product.image)}
-              alt={product.productName}
-            />
-            <div className="product-info">
+          <div key={index} className="boys-catalog-product-card">
+            <img src={URL.createObjectURL(product.image)} alt={product.productName} />
+            <div className="boys-catalog-product-info">
               <h3>{product.productName}</h3>
               <p>{product.description}</p>
               <p>Price: {product.price}</p>
             </div>
-            <div className="product-actions">
+            <div className="boys-catalog-product-actions">
+              {/* Delete Button */}
               <button
-                className="edit-btn"
-                onClick={() => openEditModal(product)}
-              >
-                Edit
-              </button>
-              <button
-                className="delete-btn"
+                className="boys-catalog-delete-btn"
                 onClick={() => openDeleteModal(product)}
               >
                 Delete
@@ -123,24 +103,32 @@ const BoysLeatherShoes = () => {
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-btn" onClick={closeDeleteModal}>
+        <div className="boys-catalog-modal-overlay">
+          <div className="boys-catalog-modal-content">
+            <button className="boys-catalog-close-btn" onClick={closeDeleteModal}>
               &times;
             </button>
-            <h2>
-              Are you sure you want to delete "{productToDelete?.productName}"?
-            </h2>
-            <div className="modal-actions">
-              <button className="confirm-btn" onClick={deleteProduct}>
+            <h2>Are you sure you want to delete "{productToDelete?.productName}"?</h2>
+            <div className="boys-catalog-modal-actions">
+              <button className="boys-catalog-confirm-btn" onClick={deleteProduct}>
                 Yes
               </button>
-              <button className="cancel-btn" onClick={closeDeleteModal}>
+              <button className="boys-catalog-cancel-btn" onClick={closeDeleteModal}>
                 No
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Product Form Modal */}
+      {isEditModalOpen && (
+        <EditProductForm
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          onSubmit={editProduct}
+          product={productToEdit}
+        />
       )}
     </div>
   );
