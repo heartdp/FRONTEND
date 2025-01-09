@@ -73,20 +73,23 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
   const closeErrorModal = () => setShowErrorModal(false);
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-btn" onClick={onClose}>
+    <div className="addproduct-modal-overlay">
+      <div className="addproduct-modal-content">
+        <button className="addproduct-close-btn" onClick={onClose}>
           X
         </button>
-        <h2>Add Product</h2>
+        <h2 className="addproduct-h2">Add Product</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Product Image</label>
-            <div className="image-upload">
+            <div className="addproduct-image-upload">
               <input type="file" accept="image/*" onChange={handleFileChange} />
-              <div className="image-placeholder">
+              <div className="addproduct-image-placeholder">
                 {formData.image ? (
-                  <img src={URL.createObjectURL(formData.image)} alt="Product" />
+                  <img
+                    src={URL.createObjectURL(formData.image)}
+                    alt="Product"
+                  />
                 ) : (
                   <p>Upload Image</p>
                 )}
@@ -95,7 +98,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
           </div>
 
           {/* Product Fields */}
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Product Name</label>
             <input
               type="text"
@@ -106,7 +109,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Description</label>
             <textarea
               name="description"
@@ -116,7 +119,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Price (PHP)</label>
             <input
               type="number"
@@ -127,7 +130,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Category</label>
             <select
               name="category"
@@ -142,7 +145,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Supplier</label>
             <input
               type="text"
@@ -153,7 +156,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="addproduct-form-group">
             <label>Size</label>
             <input
               type="text"
@@ -166,7 +169,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
 
           {sizeEntered && (
             <>
-              <div className="form-group">
+              <div className="addproduct-form-group">
                 <label>Threshold</label>
                 <input
                   type="number"
@@ -176,7 +179,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
                   placeholder="Enter threshold"
                 />
               </div>
-              <div className="form-group">
+              <div className="addproduct-form-group">
                 <label>Quantity</label>
                 <input
                   type="number"
@@ -186,7 +189,7 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
                   placeholder="Enter quantity"
                 />
               </div>
-              <div className="form-group">
+              <div className="addproduct-form-group">
                 <label>Reorder</label>
                 <input
                   type="number"
@@ -199,18 +202,18 @@ const AddProductForm = ({ isOpen, onClose, onSubmit }) => {
             </>
           )}
 
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="addproduct-submit-btn">
             Add Product
           </button>
         </form>
       </div>
 
       {showErrorModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="addproduct-modal-overlay">
+          <div className="addproduct-modal-content">
             <h2>Missing Fields</h2>
             <p>All fields are required. Please fill in all the fields.</p>
-            <button className="submit-btn" onClick={closeErrorModal}>
+            <button className="addproduct-submit-btn" onClick={closeErrorModal}>
               OK
             </button>
           </div>
